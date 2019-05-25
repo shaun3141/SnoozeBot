@@ -20,7 +20,7 @@ app.get('/auth/', (req, res) => {
 
   let authStr = 'grant_type=authorization_code' +
   '&client_id=' + process.env.HELP_SCOUT_APP_ID +
-  '&client_secret=' + process.env.HELP_SCOUT_APP_ID +
+  '&client_secret=' + process.env.HELP_SCOUT_APP_SECRET +
   '&code=' + req.query.code;
 
   request.post('https://api.helpscout.net/v2/oauth2/token' + authStr, {}, (error, res, body) => {
