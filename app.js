@@ -11,8 +11,7 @@ app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/apphtml', (req, res) => {
-
+app.post('/app/apphtml', (req, res) => {
   res.send(appGenerator.getApp());
 });
 
