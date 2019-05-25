@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/shaun3141/SnoozeBot/issues"
   },
-  "homepage": "https://github.com/shaun3141/SnoozeBot#readme"
+  "homepage": "https://github.com/shaun3141/SnoozeBot#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "helpscout-2.0": "^1.1.5",
+    "morgan": "^1.9.1"
+  }
 }
