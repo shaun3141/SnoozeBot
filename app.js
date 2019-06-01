@@ -16,7 +16,9 @@ app.use(cors());
 
 
 app.post('/app/apphtml', (req, res) => {
-  res.send(appGenerator.getApp(req.body));
+  let appHtml = appGenerator.getApp(req.body);
+  console.log("here2 | " + appHtml);
+  res.send(appHtml);
 });
 
 app.get('/auth/', (req, res) => { 
