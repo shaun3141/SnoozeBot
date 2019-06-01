@@ -4,6 +4,14 @@ exports.getApp = function(metadata) {
   const conversationId = metadata.ticket.id;
   let appHtml = "";
   appHtml = "<ul><li>" + mailboxId + "</li><li>" + conversationId + "</li></ul>";
-
+  appHtml += getLoginApp();
   return JSON.stringify({"html": appHtml});
+}
+
+function getLoginApp() {
+  let appHtml = '<span class="span.badge.blue">Connect SnoozeBot</span>';
+  appHtml += 'SnoozeBot will let you "snooze" conversations for different periods of time.'
+  appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes.'
+  appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.'
+  return appHtml;
 }
