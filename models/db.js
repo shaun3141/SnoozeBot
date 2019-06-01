@@ -43,7 +43,7 @@ pool.on('error', function (err, client) {
   console.error('idle client error', err.message, err.stack)
 })
 
-exports.getById = async function(tableName, id, cb, err_cb) {
+exports.getById = function(tableName, id, cb, err_cb) {
   return new Promise(function(resolve, reject) {
     pool.connect(function(err, client, done) {
       if(err) {

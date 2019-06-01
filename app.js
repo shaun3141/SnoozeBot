@@ -16,7 +16,7 @@ app.use(cors());
 
 
 app.post('/app/apphtml', (req, res) => {
-  let appHtml = await appGenerator.getApp(req.body);
+  let appHtml = appGenerator.getApp(req.body);
   console.log("here2 | " + appHtml);
   res.send(appHtml);
 });
