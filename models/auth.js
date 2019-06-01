@@ -1,3 +1,5 @@
+const request = require('request');
+
 exports.signIn = function(code, res) {
   let authStr = 'grant_type=authorization_code' +
   '&client_id=' + process.env.HELP_SCOUT_APP_ID +
