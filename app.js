@@ -23,14 +23,30 @@ app.get('/auth/', (req, res) => {
   '&client_secret=' + process.env.HELP_SCOUT_APP_SECRET +
   '&code=' + req.query.code;
 
-  request.post('https://api.helpscout.net/v2/oauth2/token' + authStr, {}, (error, res, body) => {
-    if (error) {
-      console.error(error)
-      return
+  request({
+    url: 'https://api.helpscout.net/v2/oauth2/token?' + authStr,
+    method: 'POST'
+  }, function (err, authRes, body) {
+    if (err || authRes.statusCode >= 400) {
+      // either log the error returned, or the body if status != success
+      console.error(Error(err ? err : body))
+    } else {
+      accessToken = JSON.parse(body);
+      accessToken.expiresAt = accessToken.expires_in * 1000 + Date.now();
+      delete accessToken.expires_in; // useless to us from this point on
+      console.log(accessToken);
+      // do something with it
     }
-    console.log(`statusCode: ${res.statusCode}`)
-    console.log(body)
   });
+
+  // request.post('https://api.helpscout.net/v2/oauth2/token?' + authStr, {}, (error, res, body) => {
+  //   if (error) {
+  //     console.error(error)
+  //     return
+  //   }
+  //   console.log(`statusCode: ${res.statusCode}`)
+  //   console.log(body)
+  // });
   res.send("Code = " + req.query.code);
 });
 
