@@ -11,7 +11,8 @@ exports.getApp = async function(metadata) {
   appHtml = "<ul><li>" + mailboxId + "</li><li>" + mailboxInDb + "</li></ul>";
   appHtml += getLoginApp();
   console.log("here | " + appHtml);
-  return JSON.stringify({"html": appHtml});
+  let payload = JSON.stringify({"html": appHtml});
+  return payload;
 }
 
 function getLoginApp() {
