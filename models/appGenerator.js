@@ -1,18 +1,17 @@
 const db = require('./db.js');
 
-exports.getApp = async function(metadata) {
+exports.getApp = function(metadata) {
   const mailboxId = metadata.mailbox.id;
   const conversationId = metadata.ticket.id;
 
-  const mailboxInDb = await db.getById("mailbox", mailboxId);
-  console.log("here3 | " + mailboxInDb);
+  // const mailboxInDb = await db.getById("mailbox", mailboxId);
+  // console.log("here3 | " + mailboxInDb);
 
   let appHtml = "";
-  appHtml = "<ul><li>" + mailboxId + "</li><li>" + mailboxInDb + "</li></ul>";
+  // appHtml = "<ul><li>" + mailboxId + "</li><li>" + mailboxInDb + "</li></ul>";
   appHtml += getLoginApp();
   console.log("here | " + appHtml);
-  let payload = JSON.stringify({"html": appHtml});
-  return payload;
+  return JSON.stringify({"html": appHtml});
 }
 
 function getLoginApp() {
