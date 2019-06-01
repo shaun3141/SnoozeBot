@@ -72,10 +72,16 @@ exports.signIn = function(code, res) {
                   } else {
                     let mailboxes = JSON.parse(body)._embedded.mailboxes;
                     console.log(mailboxes);
-                    // db.updateOrCreate("mailbox", ---, function() {
-                    //   console.log("User created with id:" + hsUser.id);
-                    //   // Awesome we have a user in our DB, let's go get their mailboxes and store those.
-                    // }, console.error);
+                    for (let idx in mailboxes) {
+                      let mailbox = {
+                        "id": mailboxes[idx].id,
+                        "user_id": hsUser.id
+                      }
+                      db.updateOrCreate("mailbox", mailbox, function() {
+                        console.log("Mailbox created with id:" + hsUser.id);
+                        // Awesome we have a user in our DB, let's go get their mailboxes and store those.
+                      }, console.error);
+                    }
                   }
                 }
               );
