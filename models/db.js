@@ -59,7 +59,7 @@ exports.getById = function(tableName, id, cb, err_cb) {
             if (result.rows[0]) {
               cb ? cb(result.rows[0]) : resolve(result.rows[0]);
             } else {
-              errCb ? errCb("No record in table '" + tableName + "' with id: " + id) : reject("No record in table '" + tableName + "' with id: " + id);
+              errCb ? errCb("No record in table '" + tableName + "' with id: " + id) : resolve();
             }
           }
         });

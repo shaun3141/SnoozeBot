@@ -1,6 +1,52 @@
 const request = require('request');
 const db = require('./db.js');
 
+exports.areCredsValid = async function(userId) {
+  const userInDb = await db.getById("auth", userId);
+  return new Promise(function(resolve, reject) {
+    request(
+      {
+        url: 'https://api.helpscout.net/v2/users/me',
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + userInDb.access_token,
+          'Content-Type': 'application/json'
+        }
+      }, function (err, userRes) {
+        if (err || userRes.statusCode >= 400) {
+          // Error | Try to refresh the tokens
+          let authStr = 'grant_type=refresh_token' +
+          '&client_id=' + process.env.HELP_SCOUT_APP_ID +
+          '&client_secret=' + process.env.HELP_SCOUT_APP_SECRET +
+          '&refresh_token=' + userInDb.refresh_token;
+
+          request(
+            {
+              url: 'https://api.helpscout.net/v2/oauth2/token?' + authStr,
+              method: 'POST'
+            }, function (err, authRes, body) {
+              if (err || authRes.statusCode >= 400) {
+                resolve(false);
+              } else {
+                // Assume if we get a fresh set of tokens, we're set
+                let accessToken = JSON.parse(body);
+                db.updateById("auth", {
+                  "id": userId, 
+                  "access_token": accessToken.access_token,
+                  "refresh_token": accessToken.refresh_token
+                });
+                resolve(true);
+              }
+            }
+          );
+        } else {
+          resolve(true);
+        }
+      }
+    );
+  });
+}
+
 exports.signIn = function(code, res) {
   let authStr = 'grant_type=authorization_code' +
   '&client_id=' + process.env.HELP_SCOUT_APP_ID +
