@@ -9,7 +9,7 @@ exports.getApp = function(metadata) {
 }
 
 function getLoginApp() {
-  let appHtml = '<span class="span.badge.blue">Connect SnoozeBot</span>';
+  let appHtml = '<button class="badge blue">Connect SnoozeBot</button>';
   appHtml += 'SnoozeBot will let you "snooze" conversations for different periods of time.'
   appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes.'
   appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.'
