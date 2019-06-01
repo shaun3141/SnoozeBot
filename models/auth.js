@@ -1,5 +1,5 @@
 const request = require('request');
-const db = require('./models/db.js');
+const db = require('./db.js');
 
 exports.signIn = function(code, res) {
   let authStr = 'grant_type=authorization_code' +
