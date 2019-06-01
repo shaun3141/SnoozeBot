@@ -85,7 +85,7 @@ exports.signIn = function(code, res) {
       );
 
       // do something with it
-      authRes.send("You're all set!")
+      res.send("You're all set!");
     }
   });
 }
