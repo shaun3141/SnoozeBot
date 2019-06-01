@@ -13,9 +13,13 @@ function getLoginApp() {
 
   let appHtml = '<a href="' + appLink + '" class="c-button c-button--sidebar">Connect SnoozeBot</a>';
 
-  appHtml += '<div class="c-sb-section__title">SnoozeBot will let you "snooze" conversations for different periods of time.';
-  appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes.';
-  appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.</div>';
-  
+  // spacer
+  appHtml += '<div class="c-sb-section__title"></div>';
+
+  appHtml += '<div class="c-sb-section__title">What is SnoozeBot?</div>';
+  appHtml += 'SnoozeBot will let you "snooze" conversations for different periods of time. ';
+  appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes. ';
+  appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.';
+
   return appHtml;
 }
