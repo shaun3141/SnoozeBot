@@ -9,9 +9,13 @@ exports.getApp = function(metadata) {
 }
 
 function getLoginApp() {
-  let appHtml = '<a href="#" class="c-button c-button--sidebar">Add to Capsule</a>';
-  appHtml += 'SnoozeBot will let you "snooze" conversations for different periods of time.'
-  appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes.'
-  appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.'
+  let appLink = 'https://secure.helpscout.net/authentication/authorizeClientApplication?client_id=996e6c5aeffa4c58b3fd4028fcd262bb';
+
+  let appHtml = '<a href="' + appLink + '" class="c-button c-button--sidebar">Connect SnoozeBot</a>';
+
+  appHtml += '<div class="c-sb-section__title">SnoozeBot will let you "snooze" conversations for different periods of time.';
+  appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes.';
+  appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.</div>';
+  
   return appHtml;
 }
