@@ -53,11 +53,11 @@ function getLoginApp() {
 
 function getSnoozeTimes() {
   let appHtml = '<div class="c-sb-section__title">I want to see this again in</div>';
-  appHtml += '<a href="#">4 hours</a>';
-  appHtml += '<a href="#">1 Day</a>';
-  appHtml += '<a href="#">2 Days</a>';
-  appHtml += '<a href="#">4 Days</a>';
-  appHtml += '<a href="#">7 Days</a>';
+  appHtml += '<div><a href="#">4 hours</a></div>';
+  appHtml += '<div><a href="#">1 Day</a></div>';
+  appHtml += '<div><a href="#">2 Days</a></div>';
+  appHtml += '<div><a href="#">4 Days</a></div>';
+  appHtml += '<div><a href="#">7 Days</a></div>';
 
   return appHtml;
 }
