@@ -44,25 +44,27 @@ pool.on('error', function (err, client) {
 })
 
 exports.getById = function(tableName, id, cb, err_cb) {
-  pool.connect(function(err, client, done) {
-    if(err) {
-      err_cb('error fetching client from pool: ' + err)
-    } else {
-      client.query('SELECT * from ' + tableName + " where id = '" + id + "' limit 1", function(err, result) {
-        //call `done()` to release the client back to the pool
-        done();
+  return new Promise(function(resolve, reject) {
+    pool.connect(function(err, client, done) {
+      if(err) {
+        errCb ? errCb(err) : reject(err);
+      } else {
+        client.query('SELECT * from ' + tableName + " where id = '" + id + "' limit 1", function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
 
-        if(err) {
-          err_cb('error running query: ' + err)
-        } else {
-          if (result.rows[0]) {
-            cb(result.rows[0]);
+          if(err) {
+            errCb ? errCb('error running query: ' + err) : reject('error running query: ' + err);
           } else {
-           err_cb("No record in table '" + tableName + "' with id: " + id)
+            if (result.rows[0]) {
+              cb ? cb(result.rows[0]) : resolve(result.rows[0]);
+            } else {
+              errCb ? errCb("No record in table '" + tableName + "' with id: " + id) : reject("No record in table '" + tableName + "' with id: " + id);
+            }
           }
-        }
-      });
-    }
+        });
+      }
+    });
   });
 }
 

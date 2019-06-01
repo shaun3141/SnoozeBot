@@ -1,9 +1,13 @@
+const db = require('./db.js');
 
-exports.getApp = function(metadata) {
+exports.getApp = async function(metadata) {
   const mailboxId = metadata.mailbox.id;
   const conversationId = metadata.ticket.id;
+
+  const mailboxInDb = await db.getById("mailbox", mailboxId);
+
   let appHtml = "";
-  // appHtml = "<ul><li>" + mailboxId + "</li><li>" + conversationId + "</li></ul>";
+  appHtml = "<ul><li>" + mailboxId + "</li><li>" + mailboxInDb + "</li></ul>";
   appHtml += getLoginApp();
   return JSON.stringify({"html": appHtml});
 }
