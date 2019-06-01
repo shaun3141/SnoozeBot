@@ -1,6 +1,6 @@
 const db = require('./db.js');
 
-exports.getApp = async function(metadata) {
+exports.getApp = function(metadata) {
   const mailboxId = metadata.mailbox.id;
   const conversationId = metadata.ticket.id;
 
