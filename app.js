@@ -16,7 +16,7 @@ app.use(cors());
 
 
 app.post('/app/apphtml', (req, res) => {
-  res.send(appGenerator.getApp());
+  res.send(appGenerator.getApp(req.body));
 });
 
 app.get('/auth/', (req, res) => { 
