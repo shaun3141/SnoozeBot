@@ -1,4 +1,5 @@
 const request = require('request');
+const db = require('./models/db.js');
 
 exports.signIn = function(code, res) {
   let authStr = 'grant_type=authorization_code' +
@@ -26,22 +27,65 @@ exports.signIn = function(code, res) {
           url: 'https://api.helpscout.net/v2/users/me',
           method: 'GET',
           headers: {
-          'Authorization': 'Bearer ' + accessToken.access_token,
-          'Content-Type': 'application/json'
+            'Authorization': 'Bearer ' + accessToken.access_token,
+            'Content-Type': 'application/json'
           }
-        }, function (err, res, body) {
-          if (err || res.statusCode >= 400) {
+        }, function (err, userRes, body) {
+          if (err || userRes.statusCode >= 400) {
             // either log the error returned, or the body if status != success
             console.error(Error(err ? err : body));
             // do something with it
           } else {
-            console.log(body)
+            let hsUser = JSON.parse(body);
+            // Create a User Object for the DB
+            let user = {
+              "id": hsUser.id,
+              "email": hsUser.email,
+              "first_name": hsUser.firstName,
+              "last_name": hsUser.lastName,
+              "access_token": accessToken.access_token,
+              "refresh_token": accessToken.refresh_token,
+              "expires_at": accessToken.expiresAt,
+              "hs_role": hsUser.role,
+              "hs_timezone": hsUser.timezone,
+              "hs_photo": hsUser.photoUrl,
+              "company_id": hsUser.companyId
+            }
+
+            db.updateOrCreate("auth", user, function() {
+              console.log("User created with id:" + hsUser.id);
+
+              // Awesome we have a user in our DB, let's go get their mailboxes and store those.
+              request(
+                {
+                  url: 'https://api.helpscout.net/v2/mailboxes',
+                  method: 'GET',
+                  headers: {
+                    'Authorization': 'Bearer ' + accessToken.access_token,
+                    'Content-Type': 'application/json'
+                  }
+                }, function (err, mailboxRes, body) {
+                  if (err || mailboxRes.statusCode >= 400) {
+                    // either log the error returned, or the body if status != success
+                    console.error(Error(err ? err : body));
+                    // do something with it
+                  } else {
+                    let mailboxes = JSON.parse(body)._embedded.mailboxes;
+                    console.log(mailboxes);
+                    // db.updateOrCreate("mailbox", ---, function() {
+                    //   console.log("User created with id:" + hsUser.id);
+                    //   // Awesome we have a user in our DB, let's go get their mailboxes and store those.
+                    // }, console.error);
+                  }
+                }
+              );
+            }, console.error);
           }
         }
       );
 
       // do something with it
-      res.send("You're all set!")
+      authRes.send("You're all set!")
     }
   });
 }
