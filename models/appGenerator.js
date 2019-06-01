@@ -3,7 +3,7 @@ exports.getApp = function(metadata) {
   const mailboxId = metadata.mailbox.id;
   const conversationId = metadata.ticket.id;
   let appHtml = "";
-  appHtml = "<ul><li>" + mailboxId + "</li><li>" + conversationId + "</li></ul>";
+  // appHtml = "<ul><li>" + mailboxId + "</li><li>" + conversationId + "</li></ul>";
   appHtml += getLoginApp();
   return JSON.stringify({"html": appHtml});
 }
@@ -14,7 +14,7 @@ function getLoginApp() {
   let appHtml = '<a href="' + appLink + '" class="c-button c-button--sidebar">Connect SnoozeBot</a>';
 
   // spacer
-  appHtml += '<div class="c-sb-section__title"></div>';
+  appHtml += '<div class="c-sb-section__title">&nbsp;</div>';
 
   appHtml += '<div class="c-sb-section__title">What is SnoozeBot?</div>';
   appHtml += 'SnoozeBot will let you "snooze" conversations for different periods of time. ';
