@@ -6,6 +6,7 @@ const path = require('path');
 
 const appGenerator = require('./models/appGenerator.js');
 const db = require('./models/db.js');
+const snooze = require('./models/snooze.js');
 const auth = require('./models/auth.js');
 
 const app = express();
@@ -25,19 +26,14 @@ app.get('/auth/', (req, res) => {
 });
 
 app.get('/snooze/', (req, res) => { 
-  let mailboxId = req.query.mailboxId;
-  let conversationId = req.query.convoId;
-  let userId = req.query.userId;
-  let openInSeconds = req.query.openIn;
-
   // Add Snooze to DB
-
-  if (true) {
-    res.send("Snooze Request recieved for " + JSON.stringify(req.query));
-    // next(); // Go to Snooze page
-  } else {
-    // Go to error
-  }
+  snooze.snoozeConversation(
+    req.query.convoId,
+    req.query.mailboxId,
+    req.query.userId,
+    req.query.openIn,
+    res
+  )
 });
 
 app.use(express.static(path.join(__dirname, './client/')));
