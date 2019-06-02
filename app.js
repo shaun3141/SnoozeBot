@@ -24,6 +24,22 @@ app.get('/auth/', (req, res) => {
   auth.signIn(code, res);
 });
 
+app.get('/snooze/', (req, res) => { 
+  let mailboxId = req.query.mailboxId;
+  let conversationId = req.query.convoId;
+  let userId = req.query.userId;
+  let openInSeconds = req.query.openIn;
+
+  // Add Snooze to DB
+
+  if (true) {
+    res.send("Snooze Request recieved for " + JSON.stringify(req.query));
+    // next(); // Go to Snooze page
+  } else {
+    // Go to error
+  }
+});
+
 app.use(express.static(path.join(__dirname, './client/')));
 
 // Sandbox

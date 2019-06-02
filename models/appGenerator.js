@@ -1,6 +1,8 @@
 const db = require('./db.js');
 const auth = require('./auth.js');
 
+const BASE_URL = 'https://hs-snoozebot.herokuapp.com/'
+
 exports.getApp = async function(metadata, res) {
   const mailboxId = metadata.mailbox.id;
   const conversationId = metadata.ticket.id;
@@ -19,7 +21,12 @@ exports.getApp = async function(metadata, res) {
         if (snoozeInDb) {
 
         } else {
-          appHtml = getSnoozeTimes();
+          let metadata = {
+            "userId": mailboxInDb.user_id,
+            "convoId": conversationId,
+            "mailboxId": mailboxId
+          }
+          appHtml = getSnoozeTimes(metadata);
         }
       }
     } else {
@@ -51,13 +58,20 @@ function getLoginApp() {
   return appHtml;
 }
 
-function getSnoozeTimes() {
+function getSnoozeTimes(ctx) {
   let appHtml = '<div class="c-sb-section__title">I want to see this again in</div>';
-  appHtml += '<div><a href="#">4 hours</a></div>';
-  appHtml += '<div><a href="#">1 Day</a></div>';
-  appHtml += '<div><a href="#">2 Days</a></div>';
-  appHtml += '<div><a href="#">4 Days</a></div>';
-  appHtml += '<div><a href="#">7 Days</a></div>';
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 10800)}">3 Hours</a></div>`;
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 21600)}">6 Hours</a></div>`;
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 43200)}">12 Hours</a></div>`;
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 86400)}">1 Day</a></div>`;
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 172800)}">2 Days</a></div>`;
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 345600)}">4 Days</a></div>`;
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 604800)}">7 Days</a></div>`;
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 2592000)}">30 Days</a></div>`;
 
   return appHtml;
+}
+
+function snoozeLinkGenerator(ctx, openInSeconds) {
+  return `${BASE_URL}snooze?mailboxId=${ctx.mailboxId}&convoId=${ctx.convoId}&userId=${ctx.userId}&openIn=${openInSeconds}`
 }
