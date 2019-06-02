@@ -47,19 +47,19 @@ exports.getById = function(tableName, id, cb, err_cb) {
   return new Promise(function(resolve, reject) {
     pool.connect(function(err, client, done) {
       if(err) {
-        errCb ? errCb(err) : reject(err);
+        err_cb ? err_cb(err) : reject(err);
       } else {
         client.query('SELECT * from ' + tableName + " where id = '" + id + "' limit 1", function(err, result) {
           //call `done()` to release the client back to the pool
           done();
 
           if(err) {
-            errCb ? errCb('error running query: ' + err) : reject('error running query: ' + err);
+            err_cb ? err_cb('error running query: ' + err) : reject('error running query: ' + err);
           } else {
             if (result.rows[0]) {
               cb ? cb(result.rows[0]) : resolve(result.rows[0]);
             } else {
-              errCb ? errCb("No record in table '" + tableName + "' with id: " + id) : resolve();
+              err_cb ? err_cb("No record in table '" + tableName + "' with id: " + id) : resolve();
             }
           }
         });
@@ -289,7 +289,6 @@ exports.updateById = function(tableName, obj, cb, err_cb) {
 }
 
 exports.updateOrCreate = function(tableName, obj, cb, err_cb) {
-  console.log(tableName + " " + obj);
   // check to see if the obj has an id
   if (obj.id) {
     // try and look up if obj exists by id
