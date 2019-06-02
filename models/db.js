@@ -289,6 +289,7 @@ exports.updateById = function(tableName, obj, cb, err_cb) {
 }
 
 exports.updateOrCreate = function(tableName, obj, cb, err_cb) {
+  console.log(tableName + " " + obj);
   // check to see if the obj has an id
   if (obj.id) {
     // try and look up if obj exists by id
