@@ -17,9 +17,7 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
   try {
     db.updateOrCreate("snooze", snooze, function() {
       res.send("Snooze is added!");
-    }, function(err) {
-      res.send("Error adding snooze | " + err);
-    });
+    }, console.error);
   } catch (e) {
     res.send("Error adding snooze");
   }
