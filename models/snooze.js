@@ -20,6 +20,7 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
   // Add to DB
   try {
     db.updateOrCreate("snooze", snooze, async function() {
+      console.log("Got here 4");
       await helpscout.postNote(userId, conversationId, message);
       // await helpscout.setConversationStatus(userId, conversationId, "Pending");
       res.send("Snooze is added!");

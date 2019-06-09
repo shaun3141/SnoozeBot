@@ -2,10 +2,12 @@ const request = require('request');
 const auth = require('./auth.js');
 
 exports.postNote = function(userId, conversationId, message) {
+  console.log("Got here 1");
   // Returns true if successful, false otherwise
   return new Promise(async function(resolve, reject) {
     const accessToken = await auth.getAccessToken(userId);
     if (accessToken) {
+      console.log("Got here 2");
       request(
         {
           url: `https://api.helpscout.net/v2/conversations/${conversationId}`,
@@ -20,7 +22,8 @@ exports.postNote = function(userId, conversationId, message) {
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
             resolve(false);
-          } else {           
+          } else {    
+            console.log("Got here 3");       
             resolve(true);
           }
         }
