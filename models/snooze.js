@@ -21,7 +21,7 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
   try {
     db.updateOrCreate("snooze", snooze, async function() {
       await helpscout.postNote(userId, conversationId, message);
-      await helpscout.setConversationStatus(userId, conversationId, "Pending");
+      await helpscout.setConversationStatus(userId, conversationId, "pending");
       res.send("Snooze is added!");
     }, function(err) {
       res.send("Error adding snooze | " + err);
@@ -32,20 +32,28 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
 }
 
 exports.wakeUpAll = async function() {
-  let snoozes = await db.getAllByFilter("snooze s, auth a", "a.id = s.user_id and s.has_awoken = false and s.snooze_date > now();");
+  let snoozes = await db.getAllByFilter("snooze", "has_awoken = false and snooze_date < now();");
   for (var idx in snoozes) {
     let snooze = snoozes[idx];
     console.log(JSON.stringify(snooze));
 
-    // Check if this user's credentials are valid
+    // Create "Awake" message
+    let message = "BEEP BEEP BEEP - This conversation has been woken up by SnoozeBot."
+
     let accessToken = await auth.getAccessToken(snooze.user_id);
     if (accessToken) {
-
+      // Add Note and re-open Help Scout Conversation
+      let didPostNote = await helpscout.postNote(userId, conversationId, message);
+      let didSetStatus = await helpscout.setConversationStatus(userId, conversationId, "active");
+      if (didSetStatus && didPostNote) {
+        // Update Snooze in DB to show it has awoken now
+        snooze.has_awoken = true;
+        db.updateById("snooze", snooze, console.log, console.error);
+      } else {
+        // TODO: Email User that Snooze failed to awake
+      }
     } else {
       // TODO: Email User that Snooze failed to awake
     }
-
-    // Add Note and re-open Help Scout Conversation
-    
   }
 };
