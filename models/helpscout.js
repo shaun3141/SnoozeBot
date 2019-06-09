@@ -21,6 +21,7 @@ exports.postNote = function(userId, conversationId, message) {
           }
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
+            console.error(err ? err : body)
             resolve(false);
           } else {    
             console.log("Got here 3");       
