@@ -44,8 +44,8 @@ exports.wakeUpAll = async function() {
     let accessToken = await auth.getAccessToken(snooze.user_id);
     if (accessToken) {
       // Add Note and re-open Help Scout Conversation
-      let didPostNote = await helpscout.postNote(snooze.user_id, snooze.conversation_id, message);
-      let didSetStatus = await helpscout.setConversationStatus(snooze.user_id,  snooze.conversation_id, "active");
+      let didPostNote = await helpscout.postNote(snooze.user_id, snooze.id, message);
+      let didSetStatus = await helpscout.setConversationStatus(snooze.user_id,  snooze.id, "active");
       if (didSetStatus && didPostNote) {
         // Update Snooze in DB to show it has awoken now
         snooze.has_awoken = true;
