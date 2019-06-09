@@ -1,5 +1,6 @@
 const db = require('./db.js');
 const helpscout = require('./helpscout.js');
+const auth = require('./auth.js');
 
 exports.snoozeConversation = function(conversationId, mailboxId, userId, openInSeconds, res) {
   // Calculate UTC Datetime that is now + openInSeconds
