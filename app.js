@@ -14,8 +14,6 @@ app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(cors());
 
-
-
 app.post('/app/apphtml', (req, res) => {
   appGenerator.getApp(req.body, res);
 });
@@ -36,13 +34,13 @@ app.get('/snooze/', (req, res) => {
   )
 });
 
-app.use(express.static(path.join(__dirname, './client/')));
+app.get('/alarm_clock/', (req, res) => { 
+  // Wake up conversations
+  snooze.wakeUpAll();
+  res.status(200).send("Waking up all conversations now");
+});
 
-// Sandbox
-// db.create("mailbox", {
-//   "id": "",
-//   "user_id": ""
-// }, console.log, console.error)
+app.use(express.static(path.join(__dirname, './client/')));
 
 app.listen(process.env.PORT || 8082);
 console.log("Server running on http://localhost:" + (process.env.PORT || 8082));

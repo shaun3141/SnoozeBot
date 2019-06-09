@@ -111,21 +111,23 @@ exports.getAll = function(tableName, cb, err_cb, order) {
 }
 
 exports.getAllByFilter = function(tableName, filter, cb, err_cb, order) {
-  pool.connect(function(err, client, done) {
-    if(err) {
-      err_cb('error fetching client from pool: ' + err)
-    } else {
-      client.query('SELECT * from ' + tableName + ' where ' + filter + (order ? ' order by ' + order : ''), function(err, result) {
-        //call `done()` to release the client back to the pool
-        done();
+  return new Promise(function(resolve, reject) {
+    pool.connect(function(err, client, done) {
+      if(err) {
+        err_cb ? err_cb(err) : reject(err);
+      } else {
+        client.query('SELECT * from ' + tableName + ' where ' + filter + (order ? ' order by ' + order : ''), function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
 
-        if(err) {
-          err_cb('error getting all by filter: ' + err)
-        } else {
-          cb(result.rows);
-        }
-      });
-    }
+          if(err) {
+            err_cb ? err_cb('error getting all by filter: ' + err) : resolve();
+          } else {
+            cb ? cb(result.rows) : resolve(result.rows);
+          }
+        });
+      }
+    });
   });
 }
 

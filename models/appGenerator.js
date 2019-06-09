@@ -11,15 +11,16 @@ exports.getApp = async function(metadata, res) {
 
   try {
     const mailboxInDb = await db.getById("mailbox", mailboxId);
+    const snoozeInDb = await db.getById("snooze", conversationId);
+    const userIsValid = await auth.getAccessToken(mailboxInDb.user_id);
+    // TODO: Promise All and Parse Out Result
     if (mailboxInDb) {
-      const snoozeInDb = false;
-      const userIsValid = auth.areCredsValid(mailboxInDb.user_id);
       if (!userIsValid) {
         // we can no longer connect to Help Scout with this user
         appHtml = getLoginApp();
       } else {
         if (snoozeInDb) {
-
+          appHtml = getSnoozeTimes(metadata);
         } else {
           let metadata = {
             "userId": mailboxInDb.user_id,

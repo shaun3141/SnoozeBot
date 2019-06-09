@@ -1,7 +1,7 @@
 const request = require('request');
 const db = require('./db.js');
 
-exports.areCredsValid = async function(userId) {
+exports.getAccessToken = async function(userId) {
   const userInDb = await db.getById("auth", userId);
   return new Promise(function(resolve, reject) {
     request(
@@ -35,12 +35,12 @@ exports.areCredsValid = async function(userId) {
                   "access_token": accessToken.access_token,
                   "refresh_token": accessToken.refresh_token
                 });
-                resolve(true);
+                resolve(accessToken.access_token);
               }
             }
           );
         } else {
-          resolve(true);
+          resolve(userInDb.access_token);
         }
       }
     );
