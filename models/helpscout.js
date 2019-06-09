@@ -1,3 +1,4 @@
+const request = require('request');
 const auth = require('./auth.js');
 
 exports.postNote = function(userId, conversationId, message) {
@@ -32,7 +33,7 @@ exports.postNote = function(userId, conversationId, message) {
 }
 
 exports.setConversationStatus = async function(userId, conversationId, status) {
-  const accessToken = await auth.getAccessToken(mailboxInDb.user_id);
+  const accessToken = await auth.getAccessToken(userId);
   if (accessToken) {
 
   } else {

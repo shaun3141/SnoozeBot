@@ -25,6 +25,7 @@ exports.getApp = async function(metadata, res) {
           "mailboxId": mailboxId
         }
         if (snoozeInDb) {
+          // TODO: Add Content indiciating this is already snoozed
           appHtml = getSnoozeTimes(metadata);
         } else {
           appHtml = getSnoozeTimes(metadata);
