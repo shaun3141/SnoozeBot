@@ -19,7 +19,7 @@ exports.postNote = function(userId, conversationId, message) {
           }
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
-            console.error(err ? err : body)
+            console.error(err ? err : body);
             resolve(false);
           } else {          
             resolve(true);
@@ -41,9 +41,11 @@ exports.setConversationStatus = function(userId, conversationId, status) {
       request(
         {
           url: `https://api.helpscout.net/v2/conversations/${conversationId}`,
-          method: 'POST',
+          method: 'PATCH',
           body: JSON.stringify({
-            "text": status
+            "op" : "replace",
+            "path" : "/status",
+            "value" : status
           }),
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -51,6 +53,7 @@ exports.setConversationStatus = function(userId, conversationId, status) {
           }
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
+            console.error(err ? err : body);
             resolve(false);
           } else {           
             resolve(true);
