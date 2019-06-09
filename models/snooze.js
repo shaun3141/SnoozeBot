@@ -49,6 +49,7 @@ exports.wakeUpAll = async function() {
       if (didSetStatus && didPostNote) {
         // Update Snooze in DB to show it has awoken now
         snooze.has_awoken = true;
+        delete snooze.snooze_date // simply omits from update, otherwise we need to format the datetime
         db.updateById("snooze", snooze, console.log, console.error);
       } else {
         // TODO: Email User that Snooze failed to awake
