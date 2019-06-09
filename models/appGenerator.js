@@ -19,14 +19,14 @@ exports.getApp = async function(metadata, res) {
         // we can no longer connect to Help Scout with this user
         appHtml = getLoginApp();
       } else {
+        let metadata = {
+          "userId": mailboxInDb.user_id,
+          "convoId": conversationId,
+          "mailboxId": mailboxId
+        }
         if (snoozeInDb) {
           appHtml = getSnoozeTimes(metadata);
         } else {
-          let metadata = {
-            "userId": mailboxInDb.user_id,
-            "convoId": conversationId,
-            "mailboxId": mailboxId
-          }
           appHtml = getSnoozeTimes(metadata);
         }
       }
