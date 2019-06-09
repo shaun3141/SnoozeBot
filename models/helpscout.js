@@ -1,3 +1,5 @@
+const auth = require('./auth.js');
+
 exports.postNote = function(userId, conversationId, message) {
   // Returns true if successful, false otherwise
   return new Promise(async function(resolve, reject) {
