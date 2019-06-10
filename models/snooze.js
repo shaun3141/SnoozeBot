@@ -12,7 +12,8 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
     "id": conversationId,
     "mailbox_id": mailboxId,
     "user_id": userId,
-    "snooze_date": snoozeDate
+    "snooze_date": snoozeDate,
+    "has_awoken": false
   }
 
   // Create Readable Message to send back to Help Scout
