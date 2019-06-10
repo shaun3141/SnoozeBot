@@ -1,12 +1,12 @@
-// Go pure vanilla JS
-// https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
+const request = require('request');
 
 const alarmClock = function() {
-  console.log("Waking up Snoozes");
-  const Http = new XMLHttpRequest();
-  const url='https://hs-snoozebot.herokuapp.com/alarm_clock';
-  Http.open("GET", url);
-  Http.send();
+  request({
+    uri: 'https://hs-snoozebot.herokuapp.com/alarm_clock',
+    method: 'GET'
+  }, function(err, res, body) {
+    console.log("Request sent to wake up snoozes");
+  });
 }
 
 setInterval(alarmClock, 15000);
