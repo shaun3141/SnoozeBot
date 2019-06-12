@@ -26,19 +26,21 @@ exports.getApp = async function(metadata, res) {
         }
         if (snoozeInDb) {
           // TODO: Add Content indiciating this is already snoozed
-          appHtml = getSnoozeTimes(metadata);
+          appHtml += getSnoozeTimes(metadata);
+          appHtml += getAboutFooter(metadata);
         } else {
-          appHtml = getSnoozeTimes(metadata);
+          appHtml += getSnoozeTimes(metadata);
+          appHtml += getAboutFooter(metadata);
         }
       }
     } else {
       // this mailbox isn't in our database, ask the user to login
-      appHtml = getLoginApp();
+      appHtml += getLoginApp();
     }
   } catch (e) {
     // Something unexpected happen
     // TODO: Make this an actual error page
-    appHtml = getLoginApp();
+    appHtml += getLoginApp();
   }
   
   res.send(JSON.stringify({"html": appHtml}));
@@ -70,6 +72,29 @@ function getSnoozeTimes(ctx) {
   appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 345600)}">4 Days</a></div>`;
   appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 604800)}">7 Days</a></div>`;
   appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 2592000)}">30 Days</a></div>`;
+
+  return appHtml;
+}
+
+function getAboutFooter(ctx) {
+  let appHtml = '';
+  appHtml += '<div class="c-sb-section c-sb-section--toggle">';
+  appHtml += `About SnoozeBot <i class="caret sb-caret"></i>`;
+  appHtml += `</div>`;
+  appHtml += `<div class="c-sb-section__body"><ul class="unstyled">`;
+
+  appHtml += '<li>SnoozeBot will let you "snooze" conversations for different periods of time. ';
+  appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes. ';
+  appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.</li>';
+  
+  appHtml += "<li></li>"
+
+  appHtml += `<li>SnoozeBot has a <a href="https://www.snooze-bot.com">website.</a></li>`;
+
+  appHtml += "<li></li>"
+
+  appHtml += `<li><a href="${snoozeLinkGenerator(ctx, 10)}">Try a 10 second test snooze with this conversation</a></li>`;
+  appHtml += `</ul></div>`;
 
   return appHtml;
 }
