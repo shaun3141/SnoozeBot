@@ -78,6 +78,8 @@ function getSnoozeTimes(ctx) {
 
 function getAboutFooter(ctx) {
   let appHtml = '';
+  appHtml += '<div class="c-sb-section__title">&nbsp;</div>'; // spacer
+
   appHtml += '<div class="c-sb-section c-sb-section--toggle">';
   appHtml += `<div class="c-sb-section__title js-sb-toggle">About SnoozeBot <i class="caret sb-caret"></i></div>`;
   appHtml += `<div class="c-sb-section__body"><ul class="unstyled">`;
@@ -88,11 +90,14 @@ function getAboutFooter(ctx) {
   
   appHtml += "<li></li>"
 
-  appHtml += `<li>SnoozeBot has a <a href="https://www.snooze-bot.com">website.</a></li>`;
+  appHtml += `<li>SnoozeBot has a <a href="https://www.snooze-bot.com">website</a>.</li>`;
+  appHtml += `<li>SnoozeBot Support is at <a href="mailto:support@snooze-bot.com">support@snooze-bot.com</a>.</li>`;
 
-  appHtml += "<li></li>"
+  appHtml += '<div class="c-sb-section__title">&nbsp;</div>'; // spacer
 
+  appHtml += '<div class="c-sb-section__title">Try It</div>';
   appHtml += `<li><a href="${snoozeLinkGenerator(ctx, 10)}">Try a 10 second test snooze with this conversation</a></li>`;
+  appHtml += `<li>This conversation will move to a pending state and have a note added, and then will re-open in 10 seconds.</li>`;
   appHtml += `</ul></div></div>`;
 
   return appHtml;
