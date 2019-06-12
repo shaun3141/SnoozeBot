@@ -88,7 +88,7 @@ function getAboutFooter(ctx) {
   appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes. ';
   appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.</li>';
   
-  appHtml += "<li></li>"
+  appHtml += '<div class="c-sb-section__title">&nbsp;</div>'; // spacer
 
   appHtml += `<li>SnoozeBot has a <a href="https://www.snooze-bot.com">website</a>.</li>`;
   appHtml += `<li>SnoozeBot Support is at <a href="mailto:support@snooze-bot.com">support@snooze-bot.com</a>.</li>`;

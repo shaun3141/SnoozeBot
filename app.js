@@ -14,12 +14,12 @@ app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post('/app/apphtml', (req, res) => {
+app.post('/app', (req, res) => {
   appGenerator.getApp(req.body, res);
 });
 
-app.post('/app', (req, res) => {
-  appGenerator.getApp(req.body, res);
+app.get('/app', (req, res) => {
+  res.redirect('/');
 });
 
 app.get('/auth/', (req, res) => { 
