@@ -26,10 +26,10 @@ exports.getApp = async function(metadata, res) {
         }
         if (snoozeInDb) {
           // TODO: Add Content indiciating this is already snoozed
-          // appHtml += getSnoozeTimes(metadata);
+          appHtml += getSnoozeTimes(metadata);
           appHtml += getAboutFooter(metadata);
         } else {
-          // appHtml += getSnoozeTimes(metadata);
+          appHtml += getSnoozeTimes(metadata);
           appHtml += getAboutFooter(metadata);
         }
       }
@@ -79,8 +79,7 @@ function getSnoozeTimes(ctx) {
 function getAboutFooter(ctx) {
   let appHtml = '';
   appHtml += '<div class="c-sb-section c-sb-section--toggle">';
-  appHtml += `About SnoozeBot <i class="caret sb-caret"></i>`;
-  appHtml += `</div>`;
+  appHtml += `<div class="c-sb-section__title js-sb-toggle">About SnoozeBot <i class="caret sb-caret"></i></div>`;
   appHtml += `<div class="c-sb-section__body"><ul class="unstyled">`;
 
   appHtml += '<li>SnoozeBot will let you "snooze" conversations for different periods of time. ';
@@ -94,7 +93,7 @@ function getAboutFooter(ctx) {
   appHtml += "<li></li>"
 
   appHtml += `<li><a href="${snoozeLinkGenerator(ctx, 10)}">Try a 10 second test snooze with this conversation</a></li>`;
-  appHtml += `</ul></div>`;
+  appHtml += `</ul></div></div>`;
 
   return appHtml;
 }
