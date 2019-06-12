@@ -1,7 +1,7 @@
 const db = require('./db.js');
 const auth = require('./auth.js');
 
-const BASE_URL = 'https://snooze-bot.com/'
+const BASE_URL = 'https://www.snooze-bot.com/'
 
 exports.getApp = async function(metadata, res) {
   const mailboxId = metadata.mailbox.id;
