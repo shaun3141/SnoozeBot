@@ -137,7 +137,7 @@ exports.signIn = function(code, res) {
       );
 
       // do something with it
-      res.send("You're all set!");
+      res.redirect("/authorization_success.html");
     }
   });
 }
