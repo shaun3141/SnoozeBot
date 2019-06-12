@@ -26,10 +26,10 @@ exports.getApp = async function(metadata, res) {
         }
         if (snoozeInDb) {
           // TODO: Add Content indiciating this is already snoozed
-          appHtml += getSnoozeTimes(metadata);
+          // appHtml += getSnoozeTimes(metadata);
           appHtml += getAboutFooter(metadata);
         } else {
-          appHtml += getSnoozeTimes(metadata);
+          // appHtml += getSnoozeTimes(metadata);
           appHtml += getAboutFooter(metadata);
         }
       }
