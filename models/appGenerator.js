@@ -47,7 +47,7 @@ exports.getApp = async function(metadata, res) {
 }
 
 function getLoginApp() {
-  let appLink = 'https://secure.helpscout.net/authentication/authorizeClientApplication?client_id=996e6c5aeffa4c58b3fd4028fcd262bb';
+  let appLink = 'https://secure.helpscout.net/authentication/authorizeClientApplication?client_id=18060346f04544519ae95bf57fb4ae89';
 
   let appHtml = '<a href="' + appLink + '" class="c-button c-button--sidebar">Connect SnoozeBot</a>';
 
