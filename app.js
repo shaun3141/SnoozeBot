@@ -18,6 +18,10 @@ app.post('/app/apphtml', (req, res) => {
   appGenerator.getApp(req.body, res);
 });
 
+app.post('/app', (req, res) => {
+  appGenerator.getApp(req.body, res);
+});
+
 app.get('/auth/', (req, res) => { 
   let code = req.query.code;
   auth.signIn(code, res);
