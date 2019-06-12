@@ -96,8 +96,8 @@ function getAboutFooter(ctx) {
   appHtml += '<div class="c-sb-section__title">&nbsp;</div>'; // spacer
 
   appHtml += '<div class="c-sb-section__title">Try It</div>';
-  appHtml += `<li><a href="${snoozeLinkGenerator(ctx, 10)}">Try a 10 second test snooze with this conversation</a></li>`;
-  appHtml += `<li>This conversation will move to a pending state and have a note added, and then will re-open in 10 seconds.</li>`;
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 10)}">Try a 10 second test snooze with this conversation</a></div>`;
+  appHtml += `<div>This conversation will move to a pending state and have a note added, and then will re-open in 10 seconds.</div>`;
   appHtml += `</ul></div></div>`;
 
   return appHtml;

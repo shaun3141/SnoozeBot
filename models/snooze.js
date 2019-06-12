@@ -24,7 +24,7 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
     db.updateOrCreate("snooze", snooze, async function() {
       await helpscout.postNote(userId, conversationId, message);
       await helpscout.setConversationStatus(userId, conversationId, "pending");
-      res.redirect("/snooze_added");
+      res.redirect("/snooze_added.html");
     }, function(err) {
       res.send("Error adding snooze | " + err);
     });
