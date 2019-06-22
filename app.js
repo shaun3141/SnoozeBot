@@ -48,7 +48,7 @@ app.get('/alarm_clock/', (req, res) => {
 app.use(express.static(path.join(__dirname, './client/')));
 
 // Test duration -> text conversion
-console.log(moment.duration(10, "seconds").humanize());
+// console.log(moment.duration(-10, "seconds").humanize());
 
 app.listen(process.env.PORT || 8082);
 console.log("Server running on http://localhost:" + (process.env.PORT || 8082));

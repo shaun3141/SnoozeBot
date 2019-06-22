@@ -66,8 +66,16 @@ function getLoginApp() {
 
 function getCurrentlySnoozing(ctx) {
   let appHtml = '';
-  appHtml += `<div>Snooze Time: ${ctx.snoozeDate}</div>`;
-  appHtml += `<div>Has Awoken: ${ctx.hasAwoken}</div>`;
+  let snoozeDate = new Date(ctx.snoozeDate);
+  let timeFromSnooze = moment.duration(snoozeDate-Date.now()).humanize();
+
+  if (ctx.hasAwoken) {
+    appHtml += `<div>This conversation was snoozing until ${timeFromSnooze} ago, it's currently awake now.</div>`;
+  } else {
+    appHtml += `<div>This conversation is snoozing right now, it will wake up in ${timeFromSnooze}.</div>`;
+  }
+  
+  appHtml += '<div class="c-sb-section__title">&nbsp;</div>'; // spacer
   return appHtml;
 }
 
