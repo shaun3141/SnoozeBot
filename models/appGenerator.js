@@ -42,6 +42,7 @@ exports.getApp = async function(metadata, res) {
   } catch (e) {
     // Something unexpected happen
     // TODO: Make this an actual error page
+    console.error(e);
     appHtml += getLoginApp();
   }
   
@@ -74,7 +75,7 @@ function getCurrentlySnoozing(ctx) {
   } else {
     appHtml += `<div>This conversation is snoozing right now, it will wake up in ${timeFromSnooze}.</div>`;
   }
-  
+
   appHtml += '<div class="c-sb-section__title">&nbsp;</div>'; // spacer
   return appHtml;
 }
