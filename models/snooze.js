@@ -18,6 +18,7 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
   }
 
   // Create Readable Message to send back to Help Scout
+  console.log("Open in:" + openInSeconds);
   let openInText = moment.duration(openInSeconds, "seconds").humanize();
   let message = `This conversation has been successfully snoozed, it will re-open in ${openInText}!`;
 
