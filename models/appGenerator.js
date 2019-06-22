@@ -22,10 +22,12 @@ exports.getApp = async function(metadata, res) {
         let metadata = {
           "userId": mailboxInDb.user_id,
           "convoId": conversationId,
-          "mailboxId": mailboxId
+          "mailboxId": mailboxId,
+          "hasAwoken": snoozeInDb.has_awoken,
+          "snoozeDate": snoozeInDb.snooze_date
         }
         if (snoozeInDb) {
-          // TODO: Add Content indiciating this is already snoozed
+          appHtml += getCurrentlySnoozing(metadata);
           appHtml += getSnoozeTimes(metadata);
           appHtml += getAboutFooter(metadata);
         } else {
@@ -62,6 +64,13 @@ function getLoginApp() {
   return appHtml;
 }
 
+function getCurrentlySnoozing(ctx) {
+  let appHtml = '';
+  appHtml += `<div>Snooze Time: ${ctx.snoozeDate}</div>`;
+  appHtml += `<div>Has Awoken: ${ctx.hasAwoken}</div>`;
+  return appHtml;
+}
+
 function getSnoozeTimes(ctx) {
   let appHtml = '<div class="c-sb-section__title">I want to see this again in</div>';
   appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 10800)}">3 Hours</a></div>`;
@@ -82,21 +91,21 @@ function getAboutFooter(ctx) {
 
   appHtml += '<div class="c-sb-section c-sb-section--toggle">';
   appHtml += `<div class="c-sb-section__title js-sb-toggle">About SnoozeBot <i class="caret sb-caret"></i></div>`;
-  appHtml += `<div class="c-sb-section__body"><ul class="unstyled">`;
+  appHtml += `<div class="c-sb-section__body">`;
 
-  appHtml += '<li>SnoozeBot will let you "snooze" conversations for different periods of time. ';
+  appHtml += '<ul class="unstyled"><li>SnoozeBot will let you "snooze" conversations for different periods of time. ';
   appHtml += 'The conversation will be moved to "Pending" until the length of time you specified passes. ';
-  appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.</li>';
+  appHtml += 'When that happens, the bot will re-open the conversation and add a quick note.</li></ul>';
   
   appHtml += '<div class="c-sb-section__title">&nbsp;</div>'; // spacer
 
-  appHtml += `<li>SnoozeBot has a <a href="https://www.snooze-bot.com">website</a>.</li>`;
-  appHtml += `<li>SnoozeBot Support is at <a href="mailto:support@snooze-bot.com">support@snooze-bot.com</a>.</li>`;
+  appHtml += `<ul class="unstyled"><li>SnoozeBot has a <a href="https://www.snooze-bot.com">website</a>.</li>`;
+  appHtml += `<li>Support is at <a href="mailto:support@snooze-bot.com">support@snooze-bot.com</a>.</li></ul>`;
 
   appHtml += '<div class="c-sb-section__title">&nbsp;</div>'; // spacer
 
-  appHtml += '<div class="c-sb-section__title">Try It</div>';
-  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 10)}">Try a 10 second test snooze with this conversation</a></div>`;
+  appHtml += '<div class="c-sb-section__title">Test it out</div>';
+  appHtml += `<div><a href="${snoozeLinkGenerator(ctx, 10)}">Try a 10 second test snooze</a></div>`;
   appHtml += `<div>This conversation will move to a pending state and have a note added, and then will re-open in 10 seconds.</div>`;
   appHtml += `</ul></div></div>`;
 

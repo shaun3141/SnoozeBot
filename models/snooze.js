@@ -1,6 +1,7 @@
 const db = require('./db.js');
 const helpscout = require('./helpscout.js');
 const auth = require('./auth.js');
+const moment = require('moment');
 
 exports.snoozeConversation = function(conversationId, mailboxId, userId, openInSeconds, res) {
   // Calculate UTC Datetime that is now + openInSeconds
@@ -17,7 +18,8 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
   }
 
   // Create Readable Message to send back to Help Scout
-  let message = "This conversation has been successfully snoozed!";
+  let openInText = moment.duration(openInSeconds, "seconds").humanize();
+  let message = `This conversation has been successfully snoozed, it will re-open in ${openInText}!`;
 
   // Add to DB
   try {
