@@ -9,6 +9,7 @@ const appGenerator = require('./models/appGenerator.js');
 const db = require('./models/db.js');
 const snooze = require('./models/snooze.js');
 const auth = require('./models/auth.js');
+const helpscout = require('./models/helpscout.js');
 
 const app = express();
 app.use(morgan('combined'));
@@ -46,6 +47,9 @@ app.get('/alarm_clock/', (req, res) => {
 });
 
 app.use(express.static(path.join(__dirname, './client/')));
+
+// helpscout.addConversationTag("326808", "883799877", "snoozing");
+// helpscout.removeConversationTag("326808", "883799877", "snoozing");
 
 // Test duration -> text conversion
 // console.log(moment.duration(-10, "seconds").humanize());

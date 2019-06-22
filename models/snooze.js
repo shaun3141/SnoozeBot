@@ -24,13 +24,16 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
   // Add to DB
   try {
     db.updateOrCreate("snooze", snooze, async function() {
+      await helpscout.addConversationTag(userId, conversationId, "snoozing");
       await helpscout.postNote(userId, conversationId, message);
       await helpscout.setConversationStatus(userId, conversationId, "pending");
       res.redirect("/snooze_added.html");
     }, function(err) {
+      console.error(err);
       res.send("Error adding snooze | " + err);
     });
   } catch (e) {
+    console.error(e);
     res.send("Error adding snooze");
   }
 }
@@ -47,9 +50,11 @@ exports.wakeUpAll = async function() {
     let accessToken = await auth.getAccessToken(snooze.user_id);
     if (accessToken) {
       // Add Note and re-open Help Scout Conversation
+      let didRemoveTag = await helpscout.removeConversationTag(snooze.user_id, snooze.id, "snoozing");
       let didPostNote = await helpscout.postNote(snooze.user_id, snooze.id, message);
       let didSetStatus = await helpscout.setConversationStatus(snooze.user_id,  snooze.id, "active");
-      if (didSetStatus && didPostNote) {
+      
+      if (didRemoveTag && didSetStatus && didPostNote) {
         // Update Snooze in DB to show it has awoken now
         snooze.has_awoken = true;
         delete snooze.snooze_date; // simply omits from update, otherwise we need to format the datetime
