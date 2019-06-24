@@ -1,29 +1,16 @@
 {
-  "name": "snoozebot",
+  "name": "SnoozeBot",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "heroku-build": "npm run build-client && npm run install-server",
+    "start": "node server/src/app.js",
+    "build-client": "cd ./client && npm install && npm run build",
+    "install-server": "cd ./server && npm install",
+    "dev": "npm run heroku-build && npm run start"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shaun3141/SnoozeBot.git"
+  "engines": {
+    "node": "10.15.0"
   },
-  "author": "Shaun VanWeelden",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shaun3141/SnoozeBot/issues"
-  },
-  "homepage": "https://github.com/shaun3141/SnoozeBot#readme",
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
-    "helpscout-2.0": "^1.1.5",
-    "moment": "^2.24.0",
-    "morgan": "^1.9.1",
-    "pg": "^7.11.0",
-    "request": "^2.88.0"
-  }
+  "cacheDirectories": ["client/node_modules", "server/node_modules"]
 }

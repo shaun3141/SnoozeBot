@@ -1,0 +1,29 @@
+{
+  "name": "snoozebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaun3141/SnoozeBot.git"
+  },
+  "author": "Shaun VanWeelden",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shaun3141/SnoozeBot/issues"
+  },
+  "homepage": "https://github.com/shaun3141/SnoozeBot#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "helpscout-2.0": "^1.1.5",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
+    "pg": "^7.11.0",
+    "request": "^2.88.0"
+  }
+}

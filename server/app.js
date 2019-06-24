@@ -46,7 +46,7 @@ app.get('/alarm_clock/', (req, res) => {
   res.status(200).send("Waking up all conversations now");
 });
 
-app.use(express.static(path.join(__dirname, './client/')));
+app.use(express.static(path.join(__dirname, './../web/')));
 
 // helpscout.addConversationTag("326808", "883799877", "snoozing");
 // helpscout.removeConversationTag("326808", "883799877", "snoozing");
