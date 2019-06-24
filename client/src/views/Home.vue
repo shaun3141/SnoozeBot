@@ -81,51 +81,51 @@
 </script>
 
 <style scoped>
-.divider {
-  background-color: #ffc434;
-  height: 5px;
-  border-radius: 5px;
-  margin: 15px;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
-}
-
-.introStep  {
-  padding-top: 30px !important;
-}
-
-.stepHeader {
-  font-weight: bold;
-  font-size: 1.5em;
-}
-
-.stepText {
-  font-size: 1.3em;
-}
-
-.stepImg {
-  width: 90%;
-}
-
-#urlBox {
-  background-color: #eee;
-  display: inline-block;
-  padding: 5px;
-  border-radius: 5px;
-  border: solid 1px #ddd;
-  margin-bottom: 25px;
-}    
-
-@media only screen and (min-width: 601px) {
-  #step2 {
-    margin-top: 85px;
+  .divider {
+    background-color: #ffc434;
+    height: 5px;
+    border-radius: 5px;
+    margin: 15px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
   }
 
-  #step3 {
-    margin-top: 200px;
+  .introStep  {
+    padding-top: 30px !important;
+  }
+
+  .stepHeader {
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+
+  .stepText {
+    font-size: 1.3em;
+  }
+
+  .stepImg {
+    width: 90%;
   }
 
   #urlBox {
-    margin-left: 66px;
+    background-color: #eee;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 5px;
+    border: solid 1px #ddd;
+    margin-bottom: 25px;
+  }    
+
+  @media only screen and (min-width: 601px) {
+    #step2 {
+      margin-top: 85px;
+    }
+
+    #step3 {
+      margin-top: 200px;
+    }
+
+    #urlBox {
+      margin-left: 66px;
+    }
   }
-}
 </style>

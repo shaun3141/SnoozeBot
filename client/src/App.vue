@@ -26,14 +26,17 @@
       },
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
-        // { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Lato|Nunito' },
         { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css' }
       ]
     }
   }
 </script>
 
-<style scoped>
+<style>
+html, body, #app {
+  height: 100%;
+}
+
 body {
   display: flex;
   min-height: 100vh;

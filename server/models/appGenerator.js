@@ -23,11 +23,11 @@ exports.getApp = async function(metadata, res) {
         let metadata = {
           "userId": mailboxInDb.user_id,
           "convoId": conversationId,
-          "mailboxId": mailboxId,
-          "hasAwoken": snoozeInDb.has_awoken,
-          "snoozeDate": snoozeInDb.snooze_date
+          "mailboxId": mailboxId
         }
         if (snoozeInDb) {
+          metadata.hasAwoken = snoozeInDb.has_awoken;
+          metadata.snoozeDate = snoozeInDb.snooze_date;
           appHtml += getCurrentlySnoozing(metadata);
           appHtml += getSnoozeTimes(metadata);
           appHtml += getAboutFooter(metadata);
