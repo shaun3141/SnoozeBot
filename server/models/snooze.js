@@ -42,19 +42,23 @@ exports.wakeUpAll = async function() {
   let snoozes = await db.getAllByFilter("snooze", "has_awoken = false and snooze_date < now();");
   for (var idx in snoozes) {
     let snooze = snoozes[idx];
-    console.log(JSON.stringify(snooze));
+    console.log("Waking up Snooze: " + JSON.stringify(snooze));
 
     // Create "Awake" message
     let message = "BEEP BEEP BEEP - This conversation has been woken up by SnoozeBot."
 
     let accessToken = await auth.getAccessToken(snooze.user_id);
     if (accessToken) {
-      // Add Note and re-open Help Scout Conversation
-      let didRemoveTag = await helpscout.removeConversationTag(snooze.user_id, snooze.id, "snoozing");
-      let didPostNote = await helpscout.postNote(snooze.user_id, snooze.id, message);
-      let didSetStatus = await helpscout.setConversationStatus(snooze.user_id,  snooze.id, "active");
+
+      // Add Note and re-open Help Scout Conversation, order is important
+      let didPostNote, didRemoveTag, didSetStatus = {success: false};
+      didPostNote = await helpscout.postNote(snooze.user_id, snooze.id, message);
+      if (didPostNote.success) {
+        didRemoveTag = await helpscout.removeConversationTag(snooze.user_id, snooze.id, "snoozing");
+        didSetStatus = await helpscout.setConversationStatus(snooze.user_id,  snooze.id, "active");
+      }
       
-      if (didRemoveTag && didSetStatus && didPostNote) {
+      if (didRemoveTag.success && didSetStatus.success && didPostNote.success) {
         // Update Snooze in DB to show it has awoken now
         snooze.has_awoken = true;
         delete snooze.snooze_date; // simply omits from update, otherwise we need to format the datetime
@@ -62,6 +66,7 @@ exports.wakeUpAll = async function() {
         db.updateById("snooze", snooze, console.log, console.error);
       } else {
         // TODO: Email User that Snooze failed to awake
+        console.log("About to email user that Snooze failed because " + didPostNote.message);
       }
     } else {
       // TODO: Email User that Snooze failed to awake

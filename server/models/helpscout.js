@@ -20,15 +20,15 @@ exports.postNote = function(userId, conversationId, message) {
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
             console.error(err ? err : body);
-            resolve(false);
+            resolve({success: false, message: err ? err : body.message});
           } else {          
-            resolve(true);
+            resolve({success: true});
           }
         }
       );
     } else {
-      console.error("Unable to post note, user seems to be invalid");
-      resolve(false);
+      console.error("Unable to post a note, authenticated user seems to be invalid");
+      resolve({success: false, message: "Unable to post a note, authenticated user seems to be invalid"});
     }
   });
 }
@@ -54,15 +54,15 @@ exports.setConversationStatus = function(userId, conversationId, status) {
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
             console.error(err ? err : body);
-            resolve(false);
+            resolve({success: false, message: err ? err : body.message});
           } else {           
-            resolve(true);
+            resolve({success: true});
           }
         }
       );
     } else {
-      console.error("Unable to post note, user seems to be invalid");
-      resolve(false);
+      console.error("Unable to set conversation status, authenticated user seems to be invalid");
+      resolve({success: false, message: "Unable to set conversation status, authenticated user seems to be invalid"});
     }
   });
 }
@@ -84,7 +84,7 @@ exports.addConversationTag = function(userId, conversationId, tag) {
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
             console.error(err ? err : body);
-            resolve(false);
+            resolve({success: false, message: err ? err : body.message});
           } else {
             let conversation = JSON.parse(body);
 
@@ -109,9 +109,9 @@ exports.addConversationTag = function(userId, conversationId, tag) {
               }, function (err, res, body) {
                 if (err || res.statusCode >= 400) {
                   console.error(err ? err : body);
-                  resolve(false);
+                  resolve({success: false, message: err ? err : body.message});
                 } else {          
-                  resolve(true);
+                  resolve({success: true});
                 }
               }
             );
@@ -119,7 +119,7 @@ exports.addConversationTag = function(userId, conversationId, tag) {
         }
       );
     } else {
-      console.error("Unable to get conversation, user seems to be invalid");
+      console.error("Unable to get conversation, autheticated user seems to be invalid");
       resolve(false);
     }
   });
