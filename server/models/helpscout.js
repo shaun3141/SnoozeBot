@@ -20,7 +20,7 @@ exports.postNote = function(userId, conversationId, message) {
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
             console.error(err ? err : body);
-            resolve({success: false, message: err ? err : body.message});
+            resolve({success: false, message: err ? err : JSON.parse(body).message});
           } else {          
             resolve({success: true});
           }
@@ -54,7 +54,7 @@ exports.setConversationStatus = function(userId, conversationId, status) {
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
             console.error(err ? err : body);
-            resolve({success: false, message: err ? err : body.message});
+            resolve({success: false, message: err ? err : JSON.parse(body).message});
           } else {           
             resolve({success: true});
           }
@@ -84,7 +84,7 @@ exports.addConversationTag = function(userId, conversationId, tag) {
         }, function (err, res, body) {
           if (err || res.statusCode >= 400) {
             console.error(err ? err : body);
-            resolve({success: false, message: err ? err : body.message});
+            resolve({success: false, message: err ? err : JSON.parse(body).message});
           } else {
             let conversation = JSON.parse(body);
 
@@ -109,7 +109,7 @@ exports.addConversationTag = function(userId, conversationId, tag) {
               }, function (err, res, body) {
                 if (err || res.statusCode >= 400) {
                   console.error(err ? err : body);
-                  resolve({success: false, message: err ? err : body.message});
+                  resolve({success: false, message: err ? err : JSON.parse(body).message});
                 } else {          
                   resolve({success: true});
                 }

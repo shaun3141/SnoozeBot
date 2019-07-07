@@ -2,6 +2,8 @@ const db = require('./db.js');
 const helpscout = require('./helpscout.js');
 const auth = require('./auth.js');
 const moment = require('moment');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.snoozeConversation = function(conversationId, mailboxId, userId, openInSeconds, res) {
   // Calculate UTC Datetime that is now + openInSeconds
@@ -39,9 +41,12 @@ exports.snoozeConversation = function(conversationId, mailboxId, userId, openInS
 }
 
 exports.wakeUpAll = async function() {
-  let snoozes = await db.getAllByFilter("snooze", "has_awoken = false and snooze_date < now();");
+  let snoozes = await db.getAllByFilter("snooze", "has_awoken = false and has_failed = false and snooze_date < now();");
   for (var idx in snoozes) {
     let snooze = snoozes[idx];
+    delete snooze.snooze_date; // simply omits from update, otherwise we need to format the datetime
+    delete snooze.created_date; // simply omits from update, otherwise we need to format the datetime
+
     console.log("Waking up Snooze: " + JSON.stringify(snooze));
 
     // Create "Awake" message
@@ -51,7 +56,10 @@ exports.wakeUpAll = async function() {
     if (accessToken) {
 
       // Add Note and re-open Help Scout Conversation, order is important
-      let didPostNote, didRemoveTag, didSetStatus = {success: false};
+      var didPostNote = {success: false};
+      let didRemoveTag = {success: false};
+      let didSetStatus = {success: false};
+
       didPostNote = await helpscout.postNote(snooze.user_id, snooze.id, message);
       if (didPostNote.success) {
         didRemoveTag = await helpscout.removeConversationTag(snooze.user_id, snooze.id, "snoozing");
@@ -61,15 +69,47 @@ exports.wakeUpAll = async function() {
       if (didRemoveTag.success && didSetStatus.success && didPostNote.success) {
         // Update Snooze in DB to show it has awoken now
         snooze.has_awoken = true;
-        delete snooze.snooze_date; // simply omits from update, otherwise we need to format the datetime
-        delete snooze.created_date; // simply omits from update, otherwise we need to format the datetime
         db.updateById("snooze", snooze, console.log, console.error);
+
       } else {
-        // TODO: Email User that Snooze failed to awake
-        console.log("About to email user that Snooze failed because " + didPostNote.message);
+        let failureMessage = didPostNote.message ? didPostNote.message : didRemoveTag.message ? didRemoveTag.message : didSetStatus.message;
+        console.log("About to email user that Snooze failed because " + failureMessage);
+
+        snooze.has_failed = true;
+        snooze.failure_reason = failureMessage.substr(0,128);
+        db.updateById("snooze", snooze, console.log, console.error);
+
+        const msg = {
+          to: 'shaun.t.vanweelden@gmail.com',
+          from: 'shaun@snooze-bot.com',
+          templateId: process.env.SENDGRID_TEMPLATE_ON_ERROR,
+          dynamic_template_data: {
+            action_text: 're-open a conversation for you',
+            error_text: failureMessage,
+            helpscout_link: `https://secure.helpscout.net/conversation/${snooze.id}/`,
+          },
+        };
+
+        sgMail.send(msg);
       }
     } else {
-      // TODO: Email User that Snooze failed to awake
+
+      snooze.has_failed = true;
+      snooze.failure_reason = 'UserAuthentication';
+      db.updateById("snooze", snooze, console.log, console.error);
+
+      const msg = {
+        to: 'shaun.t.vanweelden@gmail.com',
+        from: 'shaun@snooze-bot.com',
+        templateId: process.env.SENDGRID_TEMPLATE_ON_ERROR,
+        dynamic_template_data: {
+          action_text: 're-open a conversation for you',
+          error_text: 'User is no longer authenticated to SnoozeBot, please re-connect SnoozeBot to Help Scout in Help Scout',
+          helpscout_link: `https://secure.helpscout.net/conversation/${snooze.id}/`,
+        },
+      };
+
+      sgMail.send(msg);
     }
   }
 };

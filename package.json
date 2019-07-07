@@ -12,5 +12,11 @@
   "engines": {
     "node": "10.15.0"
   },
-  "cacheDirectories": ["client/node_modules", "server/node_modules"]
+  "cacheDirectories": [
+    "client/node_modules",
+    "server/node_modules"
+  ],
+  "dependencies": {
+    "@sendgrid/mail": "^6.4.0"
+  }
 }
