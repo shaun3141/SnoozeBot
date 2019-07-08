@@ -120,7 +120,7 @@ exports.addConversationTag = function(userId, conversationId, tag) {
       );
     } else {
       console.error("Unable to get conversation, autheticated user seems to be invalid");
-      resolve(false);
+      resolve({success: false, message: "Unable to set conversation status, authenticated user seems to be invalid"});
     }
   });
 }
@@ -167,9 +167,9 @@ exports.removeConversationTag = function(userId, conversationId, tag) {
               }, function (err, res, body) {
                 if (err || res.statusCode >= 400) {
                   console.error(err ? err : body);
-                  resolve(false);
+                  resolve({success: false, message: err ? err : JSON.parse(body).message});
                 } else {          
-                  resolve(true);
+                  resolve({success: true});
                 }
               }
             );
@@ -178,7 +178,7 @@ exports.removeConversationTag = function(userId, conversationId, tag) {
       );
     } else {
       console.error("Unable to get conversation, user seems to be invalid");
-      resolve(false);
+      resolve({success: false, message: "Unable to set conversation status, authenticated user seems to be invalid"});
     }
   });
 }
