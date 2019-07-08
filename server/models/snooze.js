@@ -57,14 +57,18 @@ exports.wakeUpAll = async function() {
 
       // Add Note and re-open Help Scout Conversation, order is important
       var didPostNote = {success: false};
-      let didRemoveTag = {success: false};
-      let didSetStatus = {success: false};
+      var didRemoveTag = {success: false};
+      var didSetStatus = {success: false};
 
       didPostNote = await helpscout.postNote(snooze.user_id, snooze.id, message);
       if (didPostNote.success) {
         didRemoveTag = await helpscout.removeConversationTag(snooze.user_id, snooze.id, "snoozing");
         didSetStatus = await helpscout.setConversationStatus(snooze.user_id,  snooze.id, "active");
       }
+
+      console.log("RemoveTag:" + didRemoveTag.success);
+      console.log("Did Set Status: " + didSetStatus.success);
+      console.log("Did Post Note: " + didPostNote.success);
       
       if (didRemoveTag.success && didSetStatus.success && didPostNote.success) {
         // Update Snooze in DB to show it has awoken now
