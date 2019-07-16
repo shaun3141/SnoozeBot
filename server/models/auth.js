@@ -34,7 +34,7 @@ exports.getAccessToken = async function(userId) {
                   "id": userId, 
                   "access_token": accessToken.access_token,
                   "refresh_token": accessToken.refresh_token
-                });
+                }, console.log, console.error);
                 resolve(accessToken.access_token);
               }
             }
