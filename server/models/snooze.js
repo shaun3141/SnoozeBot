@@ -66,10 +66,6 @@ exports.wakeUpAll = async function() {
         didSetStatus = await helpscout.setConversationStatus(snooze.user_id,  snooze.id, "active");
       }
 
-      console.log("RemoveTag:" + didRemoveTag.success);
-      console.log("Did Set Status: " + didSetStatus.success);
-      console.log("Did Post Note: " + didPostNote.success);
-      
       if (didRemoveTag.success && didSetStatus.success && didPostNote.success) {
         // Update Snooze in DB to show it has awoken now
         snooze.has_awoken = true;
