@@ -34,7 +34,7 @@ exports.getAccessToken = async function(userId) {
                   "id": userId, 
                   "access_token": accessToken.access_token,
                   "refresh_token": accessToken.refresh_token
-                }, console.log, console.error);
+                }, function() {}, console.error); // Todo - instead of console.log, just have an empty function
                 resolve(accessToken.access_token);
               }
             }
@@ -65,7 +65,6 @@ exports.signIn = function(code, res) {
       accessToken = JSON.parse(body);
       accessToken.expiresAt = accessToken.expires_in * 1000 + Date.now();
       delete accessToken.expires_in; // useless to us from this point on
-      console.log(accessToken); // don't do this in production :) 
 
       // Get more User Data
       request(
@@ -117,7 +116,6 @@ exports.signIn = function(code, res) {
                     // do something with it
                   } else {
                     let mailboxes = JSON.parse(body)._embedded.mailboxes;
-                    console.log(mailboxes);
                     for (let idx in mailboxes) {
                       let mailbox = {
                         "id": mailboxes[idx].id,

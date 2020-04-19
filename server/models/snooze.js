@@ -47,7 +47,7 @@ exports.wakeUpAll = async function() {
     delete snooze.snooze_date; // simply omits from update, otherwise we need to format the datetime
     delete snooze.created_date; // simply omits from update, otherwise we need to format the datetime
 
-    console.log("Waking up Snooze: " + JSON.stringify(snooze));
+    console.log(`Waking up Snooze: ${snooze.id}`);
 
     // Create "Awake" message
     let message = "BEEP BEEP BEEP - This conversation has been woken up by SnoozeBot."
@@ -69,7 +69,7 @@ exports.wakeUpAll = async function() {
       if (didRemoveTag.success && didSetStatus.success && didPostNote.success) {
         // Update Snooze in DB to show it has awoken now
         snooze.has_awoken = true;
-        db.updateById("snooze", snooze, console.log, console.error);
+        db.updateById("snooze", snooze, function() {}, console.error);
 
       } else {
         let failureMessage = didPostNote.message ? didPostNote.message : didRemoveTag.message ? didRemoveTag.message : didSetStatus.message;
@@ -77,7 +77,7 @@ exports.wakeUpAll = async function() {
 
         snooze.has_failed = true;
         snooze.failure_reason = failureMessage.substr(0,128);
-        db.updateById("snooze", snooze, console.log, console.error);
+        db.updateById("snooze", snooze, function() {}, console.error);
 
         const msg = {
           to: 'shaun.t.vanweelden@gmail.com',
@@ -89,14 +89,18 @@ exports.wakeUpAll = async function() {
             helpscout_link: `https://secure.helpscout.net/conversation/${snooze.id}/`,
           },
         };
-
-        sgMail.send(msg);
+        try {
+          sgMail.send(msg);
+        } catch (e) {
+          console.error(e);
+        }
+        
       }
     } else {
 
       snooze.has_failed = true;
       snooze.failure_reason = 'UserAuthentication';
-      db.updateById("snooze", snooze, console.log, console.error);
+      db.updateById("snooze", snooze, function() {}, console.error);
 
       const msg = {
         to: 'shaun.t.vanweelden@gmail.com',
@@ -108,8 +112,11 @@ exports.wakeUpAll = async function() {
           helpscout_link: `https://secure.helpscout.net/conversation/${snooze.id}/`,
         },
       };
-
-      sgMail.send(msg);
+      try {
+        sgMail.send(msg);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 };
