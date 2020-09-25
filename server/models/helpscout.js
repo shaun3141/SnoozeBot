@@ -1,90 +1,121 @@
-const request = require('request');
-const auth = require('./auth.js');
+const request = require("request");
+const auth = require("./auth.js");
 
-exports.postNote = function(userId, conversationId, message) {
+exports.postNote = function (userId, conversationId, message) {
   // Returns true if successful, false otherwise
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     const accessToken = await auth.getAccessToken(userId);
     if (accessToken) {
       request(
         {
           url: `https://api.helpscout.net/v2/conversations/${conversationId}/notes`,
-          method: 'POST',
+          method: "POST",
           body: JSON.stringify({
-            "text": message
+            text: message,
           }),
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          }
-        }, function (err, res, body) {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        },
+        function (err, res, body) {
           if (err || res.statusCode >= 400) {
-            console.error(err ? err : body);
-            resolve({success: false, message: err ? err : JSON.parse(body).message});
-          } else {          
-            resolve({success: true});
+            console.error(
+              err ? `${res.statusCode} ${err}` : `${res.statusCode} ${body}`
+            );
+            // Prefer error, then body, then statuscode
+            // risk that JSON.parse fails...
+            resolve({
+              success: false,
+              message: err
+                ? err
+                : body
+                ? JSON.parse(body).message
+                : res.statusCode,
+            });
+          } else {
+            resolve({ success: true });
           }
         }
       );
     } else {
-      console.error("Unable to post a note, authenticated user seems to be invalid");
-      resolve({success: false, message: "Unable to post a note, authenticated user seems to be invalid"});
-    }
-  });
-}
-
-exports.setConversationStatus = function(userId, conversationId, status) {
-   // Returns true if successful, false otherwise
-   return new Promise(async function(resolve, reject) {
-    const accessToken = await auth.getAccessToken(userId);
-    if (accessToken) {
-      request(
-        {
-          url: `https://api.helpscout.net/v2/conversations/${conversationId}`,
-          method: 'PATCH',
-          body: JSON.stringify({
-            "op" : "replace",
-            "path" : "/status",
-            "value" : status
-          }),
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          }
-        }, function (err, res, body) {
-          if (err || res.statusCode >= 400) {
-            console.error(err ? err : body);
-            resolve({success: false, message: err ? err : JSON.parse(body).message});
-          } else {           
-            resolve({success: true});
-          }
-        }
+      console.error(
+        "Unable to post a note, authenticated user seems to be invalid"
       );
-    } else {
-      console.error("Unable to set conversation status, authenticated user seems to be invalid");
-      resolve({success: false, message: "Unable to set conversation status, authenticated user seems to be invalid"});
+      resolve({
+        success: false,
+        message:
+          "Unable to post a note, authenticated user seems to be invalid",
+      });
     }
   });
-}
+};
 
-
-exports.addConversationTag = function(userId, conversationId, tag) {
+exports.setConversationStatus = function (userId, conversationId, status) {
   // Returns true if successful, false otherwise
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     const accessToken = await auth.getAccessToken(userId);
     if (accessToken) {
       request(
         {
           url: `https://api.helpscout.net/v2/conversations/${conversationId}`,
-          method: 'GET',
+          method: "PATCH",
+          body: JSON.stringify({
+            op: "replace",
+            path: "/status",
+            value: status,
+          }),
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          }
-        }, function (err, res, body) {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        },
+        function (err, res, body) {
           if (err || res.statusCode >= 400) {
             console.error(err ? err : body);
-            resolve({success: false, message: err ? err : JSON.parse(body).message});
+            resolve({
+              success: false,
+              message: err ? err : JSON.parse(body).message,
+            });
+          } else {
+            resolve({ success: true });
+          }
+        }
+      );
+    } else {
+      console.error(
+        "Unable to set conversation status, authenticated user seems to be invalid"
+      );
+      resolve({
+        success: false,
+        message:
+          "Unable to set conversation status, authenticated user seems to be invalid",
+      });
+    }
+  });
+};
+
+exports.addConversationTag = function (userId, conversationId, tag) {
+  // Returns true if successful, false otherwise
+  return new Promise(async function (resolve, reject) {
+    const accessToken = await auth.getAccessToken(userId);
+    if (accessToken) {
+      request(
+        {
+          url: `https://api.helpscout.net/v2/conversations/${conversationId}`,
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        },
+        function (err, res, body) {
+          if (err || res.statusCode >= 400) {
+            console.error(err ? err : body);
+            resolve({
+              success: false,
+              message: err ? err : JSON.parse(body).message,
+            });
           } else {
             let conversation = JSON.parse(body);
 
@@ -98,20 +129,24 @@ exports.addConversationTag = function(userId, conversationId, tag) {
             request(
               {
                 url: `https://api.helpscout.net/v2/conversations/${conversationId}/tags`,
-                method: 'PUT',
+                method: "PUT",
                 body: JSON.stringify({
-                  "tags": Array.from(tagNames.values())
+                  tags: Array.from(tagNames.values()),
                 }),
                 headers: {
-                  'Authorization': `Bearer ${accessToken}`,
-                  'Content-Type': 'application/json'
-                }
-              }, function (err, res, body) {
+                  Authorization: `Bearer ${accessToken}`,
+                  "Content-Type": "application/json",
+                },
+              },
+              function (err, res, body) {
                 if (err || res.statusCode >= 400) {
                   console.error(err ? err : body);
-                  resolve({success: false, message: err ? err : JSON.parse(body).message});
-                } else {          
-                  resolve({success: true});
+                  resolve({
+                    success: false,
+                    message: err ? err : JSON.parse(body).message,
+                  });
+                } else {
+                  resolve({ success: true });
                 }
               }
             );
@@ -119,26 +154,33 @@ exports.addConversationTag = function(userId, conversationId, tag) {
         }
       );
     } else {
-      console.error("Unable to get conversation, autheticated user seems to be invalid");
-      resolve({success: false, message: "Unable to set conversation status, authenticated user seems to be invalid"});
+      console.error(
+        "Unable to get conversation, autheticated user seems to be invalid"
+      );
+      resolve({
+        success: false,
+        message:
+          "Unable to set conversation status, authenticated user seems to be invalid",
+      });
     }
   });
-}
+};
 
-exports.removeConversationTag = function(userId, conversationId, tag) {
+exports.removeConversationTag = function (userId, conversationId, tag) {
   // Returns true if successful, false otherwise
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     const accessToken = await auth.getAccessToken(userId);
     if (accessToken) {
       request(
         {
           url: `https://api.helpscout.net/v2/conversations/${conversationId}`,
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          }
-        }, function (err, res, body) {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        },
+        function (err, res, body) {
           if (err || res.statusCode >= 400) {
             console.error(err ? err : body);
             resolve(false);
@@ -156,20 +198,24 @@ exports.removeConversationTag = function(userId, conversationId, tag) {
             request(
               {
                 url: `https://api.helpscout.net/v2/conversations/${conversationId}/tags`,
-                method: 'PUT',
+                method: "PUT",
                 body: JSON.stringify({
-                  "tags": Array.from(tagNames.values())
+                  tags: Array.from(tagNames.values()),
                 }),
                 headers: {
-                  'Authorization': `Bearer ${accessToken}`,
-                  'Content-Type': 'application/json'
-                }
-              }, function (err, res, body) {
+                  Authorization: `Bearer ${accessToken}`,
+                  "Content-Type": "application/json",
+                },
+              },
+              function (err, res, body) {
                 if (err || res.statusCode >= 400) {
                   console.error(err ? err : body);
-                  resolve({success: false, message: err ? err : JSON.parse(body).message});
-                } else {          
-                  resolve({success: true});
+                  resolve({
+                    success: false,
+                    message: err ? err : JSON.parse(body).message,
+                  });
+                } else {
+                  resolve({ success: true });
                 }
               }
             );
@@ -178,7 +224,11 @@ exports.removeConversationTag = function(userId, conversationId, tag) {
       );
     } else {
       console.error("Unable to get conversation, user seems to be invalid");
-      resolve({success: false, message: "Unable to set conversation status, authenticated user seems to be invalid"});
+      resolve({
+        success: false,
+        message:
+          "Unable to set conversation status, authenticated user seems to be invalid",
+      });
     }
   });
-}
+};
