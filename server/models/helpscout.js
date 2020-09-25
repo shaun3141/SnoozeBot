@@ -31,7 +31,7 @@ exports.postNote = function (userId, conversationId, message) {
                 ? err
                 : body
                 ? JSON.parse(body).message
-                : res.statusCode,
+                : "" + res.statusCode,
             });
           } else {
             resolve({ success: true });
