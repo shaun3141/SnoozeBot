@@ -19,7 +19,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "helpscout-2.0": "^1.1.5",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
